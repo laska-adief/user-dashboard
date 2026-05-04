@@ -1,6 +1,10 @@
+import UserTable from "./components/UserTable"
+
 const UsersPage = () => {
   return (
-    <div>UsersPage</div>
+    <div>
+      <UserTable />
+    </div>
   )
 }
 

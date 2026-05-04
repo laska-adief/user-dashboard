@@ -5,6 +5,7 @@ import ReactQueryProvider from "@/providers/ReactQueryProvider";
 import { cn } from "@/lib/utils";
 import { TooltipProvider } from "@/components/ui/tooltip";
 import SidebarLayoutProvider from "@/providers/SidebarProvider";
+import { Toaster } from "@/components/ui/sonner";
 
 const inter = Inter({ subsets: ['latin'], variable: '--font-sans' });
 
@@ -38,6 +39,7 @@ export default function RootLayout({
           <TooltipProvider>
             <SidebarLayoutProvider>
               {children}
+              <Toaster />
             </SidebarLayoutProvider>
           </TooltipProvider>
         </ReactQueryProvider>
