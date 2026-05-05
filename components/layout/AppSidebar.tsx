@@ -5,7 +5,7 @@ import Link from 'next/link'
 
 const AppSidebar = () => {
   return (
-    <Sidebar variant="inset">
+    <Sidebar variant="inset" className='z-20'>
       <SidebarHeader>
         <div className='flex items-center gap-2 px-2 py-2'>
           <div className='bg-primary rounded-lg p-1 font-bold text-primary-foreground text-xs w-8 h-8 flex items-center justify-center shadow-lg shadow-primary/20'>UD</div>

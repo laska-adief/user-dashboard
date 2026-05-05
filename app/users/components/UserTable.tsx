@@ -1,5 +1,5 @@
 "use client";
-import { getUsers, getUsersData } from "@/action/getUsers";
+import { getUsersData } from "@/action/getUsers";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { LoadingSpinner } from "@/components/ui/loading";
@@ -14,7 +14,6 @@ import {
 import {
   Table,
   TableBody,
-  TableCaption,
   TableCell,
   TableFooter,
   TableHead,
@@ -26,11 +25,11 @@ import {
   TooltipContent,
   TooltipTrigger,
 } from "@/components/ui/tooltip";
-import { User, UserData } from "@/types/user";
+import { UserData } from "@/types/user";
 import { useQuery } from "@tanstack/react-query";
 import { ArrowDown, ArrowUp, Eye } from "lucide-react";
 import Link from "next/link";
-import React, { useEffect, useMemo, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import { toast } from "sonner";
 
 const UserTable = () => {
@@ -135,6 +134,13 @@ const UserTable = () => {
     });
   };
 
+  const handleReset = () => {
+    setSearchQuery("");
+    setSortConfig(null);
+    setCurrentPage(1);
+    setPageSize(10);
+  };
+
   if (isLoading)
     return (
       <div className="flex justify-center items-center p-10">
@@ -179,6 +185,7 @@ const UserTable = () => {
             }}
           />
         </div>
+        <Button variant="outline" onClick={() => handleReset()}>Reset</Button>
       </div>
       <div className="rounded-md border">
         <Table>

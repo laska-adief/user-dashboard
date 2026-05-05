@@ -2,70 +2,23 @@ import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import {
   Card,
   CardContent,
-  CardDescription,
-  CardFooter,
-  CardHeader,
-  CardTitle,
 } from "@/components/ui/card";
-import { UserDetail } from "@/types/user";
-import { BriefcaseBusiness, Globe, Mail, MapPin, Phone } from "lucide-react";
+import { ArrowLeft, BriefcaseBusiness, Eye, Globe, Mail, MapPin, Newspaper, Phone, SquareCheckBig } from "lucide-react";
+import PostCard from "./components/PostCard";
+import AllPostsCard from "./components/AllPostsCard";
+import TodosCard from "./components/TodosCard";
+import { getUserDetail } from "@/action/getUserDetail";
+import { Post } from "@/types/post";
+import BackButton from "@/components/ui/back-button";
 
 const UserDetailsPage = async ({ params }: { params: { id: string } }) => {
   const { id } = await params;
 
-  const dataUser: UserDetail = {
-    id: 1,
-    name: "Leanne Graham",
-    username: "Bret",
-    email: "Sincere@april.biz",
-    address: {
-      street: "Kulas Light",
-      suite: "Apt. 556",
-      city: "Gwenborough",
-      zipcode: "92998-3874",
-      geo: { lat: "-37.3159", lng: "81.1496" },
-    },
-    phone: "1-770-736-8031 x56442",
-    website: "hildegard.org",
-    company: {
-      name: "Romaguera-Crona",
-      catchPhrase: "Multi-layered client-server neural-net",
-      bs: "harness real-time e-markets",
-    },
-    posts: [
-      {
-        userId: 1,
-        id: 1,
-        title: "Exploring the Kulas Light",
-        body: "The architecture in Gwenborough is truly unique...",
-      },
-      {
-        userId: 1,
-        id: 2,
-        title: "Neural-net deep dive",
-        body: "Harnessing real-time markets requires a specific stack...",
-      },
-    ],
-    todos: [
-      {
-        userId: 1,
-        id: 1,
-        title: "Complete client-server setup",
-        completed: true,
-      },
-      {
-        userId: 1,
-        id: 2,
-        title: "Refactor neural-net logic",
-        completed: false,
-      },
-    ],
-  };
-
-  console.log("id user : ", id);
+  const dataUser = await getUserDetail(id);
 
   return (
     <>
+      <BackButton backText='Back to Users' />
       <div className="flex flex-col md:flex-row items-center gap-8 p-4">
         <Avatar className="w-48 h-48">
           <AvatarImage src="" alt={dataUser.name} />
@@ -93,6 +46,7 @@ const UserDetailsPage = async ({ params }: { params: { id: string } }) => {
           </div>
         </div>
       </div>
+
       <div className="mt-8 p-4 grid grid-cols-1 md:grid-cols-2 gap-8 md:gap-4">
         <Card>
           <CardContent className="flex flex-col gap-6">
@@ -137,6 +91,48 @@ const UserDetailsPage = async ({ params }: { params: { id: string } }) => {
               <div className="text-slate-500 uppercase">services</div>
               <div className="text-lg">{dataUser.company.bs}</div>
             </div>
+          </CardContent>
+        </Card>
+      </div>
+
+      {/* POSTS */}
+      <div className="p-4">
+        <Card>
+          <CardContent className="flex flex-col gap-6">
+            <div className="flex items-center justify-between">
+              <div className="flex items-center gap-2">
+                <Newspaper className="text-blue-400 h-6 w-6" />
+                <h3 className="text-lg font-semibold">POSTS</h3>
+              </div>
+
+              {
+                dataUser.posts.length > 2 && (
+                  <AllPostsCard posts={dataUser.posts} />
+                )
+              }
+            </div>
+
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+              {dataUser.posts.slice(0, 2).map((post: Post) => (
+                <PostCard key={post.id} post={post} />
+              ))}
+            </div>
+          </CardContent>
+        </Card>
+      </div>
+
+      {/* TODOS */}
+      <div className="p-4">
+        <Card>
+          <CardContent className="flex flex-col gap-6">
+            <div className="flex items-center justify-between">
+              <div className="flex items-center gap-2">
+                <SquareCheckBig className="text-blue-400 h-6 w-6" />
+                <h3 className="text-lg font-semibold">TODOS</h3>
+              </div>
+
+            </div>
+            <TodosCard todos={dataUser.todos} />
           </CardContent>
         </Card>
       </div>
