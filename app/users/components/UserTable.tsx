@@ -4,10 +4,19 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { LoadingSpinner } from "@/components/ui/loading";
 import {
+  Select,
+  SelectContent,
+  SelectGroup,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
+import {
   Table,
   TableBody,
   TableCaption,
   TableCell,
+  TableFooter,
   TableHead,
   TableHeader,
   TableRow,
@@ -42,8 +51,7 @@ const UserTable = () => {
     direction: "asc" | "desc" | null;
   } | null>(null);
   const [currentPage, setCurrentPage] = useState(1);
-
-  const pageSize = 10;
+  const [pageSize, setPageSize] = useState(10);
 
   const { paginatedData, totalPages } = useMemo(() => {
     if (!users) return { paginatedData: [], totalPages: 0 };
@@ -77,7 +85,7 @@ const UserTable = () => {
     const paginatedData = resultData.slice(startIndex, endIndex);
 
     return { paginatedData, totalPages };
-  }, [users, searchQuery, sortConfig, currentPage]);
+  }, [users, searchQuery, sortConfig, currentPage, pageSize]);
 
   useEffect(() => {
     if (isError) {
@@ -176,7 +184,7 @@ const UserTable = () => {
               </TableHead>
               <TableHead
                 onClick={() => handleOnSortBy("completedTodoCounts")}
-                className="bg-blue-200 cursor-pointer select-none hover:bg-muted/50 transition-colors text-center"
+                className="cursor-pointer select-none hover:bg-muted/50 transition-colors text-center"
               >
                 <div className="flex items-center justify-center gap-1 font-bold text-foreground text-center">
                   <span>Completed Todo</span>
@@ -235,6 +243,51 @@ const UserTable = () => {
               </TableRow>
             )}
           </TableBody>
+          <TableFooter>
+            <TableRow>
+              <TableCell
+                colSpan={7}
+                className="text-center flex items-center gap-2"
+              >
+                <span className="text-sm text-muted-foreground">
+                  Page {currentPage} of {totalPages}
+                </span>
+
+                <Button
+                  variant="outline"
+                  onClick={() => setCurrentPage(currentPage - 1)}
+                  disabled={currentPage === 1}
+                >
+                  Previous
+                </Button>
+                <Button
+                  variant="outline"
+                  onClick={() => setCurrentPage(currentPage + 1)}
+                  disabled={currentPage === totalPages}
+                >
+                  Next
+                </Button>
+
+                <div className="flex items-center gap-2">
+                  <span>Size : </span>
+                  <Select
+                    value={pageSize.toString()}
+                    onValueChange={(value) => setPageSize(Number(value))}
+                  >
+                    <SelectTrigger className="w-[80px]">
+                      <SelectValue placeholder="Page Size" />
+                    </SelectTrigger>
+                    <SelectContent>
+                      <SelectGroup>
+                        <SelectItem value="5">5</SelectItem>
+                        <SelectItem value="10">10</SelectItem>
+                      </SelectGroup>
+                    </SelectContent>
+                  </Select>
+                </div>
+              </TableCell>
+            </TableRow>
+          </TableFooter>
         </Table>
       </div>
     </>
