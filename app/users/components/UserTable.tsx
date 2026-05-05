@@ -177,7 +177,7 @@ const UserTable = () => {
       <div className="flex items-center gap-2 mb-6">
         <div className="w-full max-w-sm">
           <Input
-            placeholder="Search users by name, username, or email"
+            placeholder="Search user..."
             value={searchQuery}
             onChange={(e) => {
               setSearchQuery(e.target.value);
@@ -195,14 +195,14 @@ const UserTable = () => {
                 onClick={() => handleOnSortBy("name")}
                 className="cursor-pointer select-none hover:bg-muted/50 transition-colors"
               >
-                <div className="flex items-center justify-center gap-1 font-bold text-foreground">
+                <div className="flex items-center gap-1 font-bold text-foreground">
                   <span>Name</span>
                   {sortIcon("name")}
                 </div>
               </TableHead>
               <TableHead
                 onClick={() => handleOnSortBy("username")}
-                className="cursor-pointer select-none hover:bg-muted/50 transition-colors"
+                className="cursor-pointer select-none hover:bg-muted/50 transition-colors hidden lg:table-cell"
               >
                 <div className="flex items-center justify-center gap-1 font-bold text-foreground">
                   <span>Username</span>
@@ -211,28 +211,28 @@ const UserTable = () => {
               </TableHead>
               <TableHead
                 onClick={() => handleOnSortBy("email")}
-                className="cursor-pointer select-none hover:bg-muted/50 transition-colors"
+                className="cursor-pointer select-none hover:bg-muted/50 transition-colors hidden md:table-cell"
               >
                 <div className="flex items-center justify-center gap-1 font-bold text-foreground">
                   <span>Email</span>
                   {sortIcon("email")}
                 </div>
               </TableHead>
-              <TableHead>
+              <TableHead className="hidden sm:table-cell">
                 <div className="flex items-center justify-center gap-1 font-bold text-foreground">
                   <span>Posts</span>
                 </div>
               </TableHead>
               <TableHead
                 onClick={() => handleOnSortBy("completedTodoCounts")}
-                className="cursor-pointer select-none hover:bg-muted/50 transition-colors text-center"
+                className="cursor-pointer select-none hover:bg-muted/50 transition-colors text-center hidden xl:table-cell"
               >
                 <div className="flex items-center justify-center gap-1 font-bold text-foreground text-center">
                   <span>Completed Todo</span>
                   {sortIcon("completedTodoCounts")}
                 </div>
               </TableHead>
-              <TableHead>
+              <TableHead className="hidden xl:table-cell">
                 <div className="flex items-center justify-center gap-1 font-bold text-foreground">
                   <span>Pending Todo</span>
                 </div>
@@ -245,14 +245,19 @@ const UserTable = () => {
           <TableBody>
             {paginatedData.map((user: UserData) => (
               <TableRow key={user.id}>
-                <TableCell className="font-medium">{user.name}</TableCell>
-                <TableCell>{user.username}</TableCell>
-                <TableCell>{user.email}</TableCell>
-                <TableCell className="text-center">{user.postCounts}</TableCell>
-                <TableCell className="text-center">
+                <TableCell className="font-medium">
+                  <div className="flex flex-col">
+                    <span className="font-bold">{user.name}</span>
+                    <span className="text-xs text-muted-foreground md:hidden">{user.email}</span>
+                  </div>
+                </TableCell>
+                <TableCell className="hidden lg:table-cell">{user.username}</TableCell>
+                <TableCell className="hidden md:table-cell">{user.email}</TableCell>
+                <TableCell className="text-center hidden sm:table-cell">{user.postCounts}</TableCell>
+                <TableCell className="text-center hidden xl:table-cell">
                   {user.completedTodoCounts}
                 </TableCell>
-                <TableCell className="text-center">
+                <TableCell className="text-center hidden xl:table-cell">
                   {user.pendingTodoCounts}
                 </TableCell>
                 <TableCell className="flex justify-center items-center">
@@ -288,46 +293,53 @@ const UserTable = () => {
             <TableRow>
               <TableCell
                 colSpan={7}
-                className="text-center flex items-center gap-2"
+                className="p-4"
               >
-                <span className="text-sm text-muted-foreground">
-                  Page {currentPage} of {totalPages}
-                </span>
+                <div className="flex flex-col sm:flex-row items-center justify-between gap-4 w-full">
+                  <span className="text-sm text-muted-foreground order-2 sm:order-1">
+                    Page <span className="font-bold text-foreground">{currentPage}</span> of <span className="font-bold text-foreground">{totalPages}</span>
+                  </span>
 
-                <Button
-                  variant="outline"
-                  onClick={() => setCurrentPage(currentPage - 1)}
-                  disabled={currentPage === 1}
-                >
-                  Previous
-                </Button>
-                <Button
-                  variant="outline"
-                  onClick={() => setCurrentPage(currentPage + 1)}
-                  disabled={currentPage === totalPages}
-                >
-                  Next
-                </Button>
+                  <div className="flex items-center gap-2 order-1 sm:order-2">
+                    <Button
+                      variant="outline"
+                      size="sm"
+                      onClick={() => setCurrentPage(currentPage - 1)}
+                      disabled={currentPage === 1}
+                    >
+                      Previous
+                    </Button>
+                    <Button
+                      variant="outline"
+                      size="sm"
+                      onClick={() => setCurrentPage(currentPage + 1)}
+                      disabled={currentPage === totalPages}
+                    >
+                      Next
+                    </Button>
+                  </div>
 
-                <div className="flex items-center gap-2">
-                  <span>Size : </span>
-                  <Select
-                    value={pageSize.toString()}
-                    onValueChange={(value) => {
-                      setPageSize(Number(value));
-                      setCurrentPage(1);
-                    }}
-                  >
-                    <SelectTrigger className="w-[80px]">
-                      <SelectValue placeholder="Page Size" />
-                    </SelectTrigger>
-                    <SelectContent>
-                      <SelectGroup>
-                        <SelectItem value="5">5</SelectItem>
-                        <SelectItem value="10">10</SelectItem>
-                      </SelectGroup>
-                    </SelectContent>
-                  </Select>
+                  <div className="flex items-center gap-2 order-3">
+                    <span className="text-sm text-muted-foreground">Show</span>
+                    <Select
+                      value={pageSize.toString()}
+                      onValueChange={(value) => {
+                        setPageSize(Number(value));
+                        setCurrentPage(1);
+                      }}
+                    >
+                      <SelectTrigger className="w-[70px] h-8">
+                        <SelectValue placeholder="10" />
+                      </SelectTrigger>
+                      <SelectContent>
+                        <SelectGroup>
+                          <SelectItem value="5">5</SelectItem>
+                          <SelectItem value="10">10</SelectItem>
+                          <SelectItem value="20">20</SelectItem>
+                        </SelectGroup>
+                      </SelectContent>
+                    </Select>
+                  </div>
                 </div>
               </TableCell>
             </TableRow>
