@@ -143,7 +143,7 @@ const UserTable = () => {
 
   if (isLoading)
     return (
-      <div className="flex justify-center items-center p-10">
+      <div className="flex justify-center items-center p-10" data-testid="loading-spinner">
         <LoadingSpinner size={48} />
       </div>
     );

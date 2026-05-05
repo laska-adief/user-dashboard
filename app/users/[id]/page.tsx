@@ -3,7 +3,7 @@ import {
   Card,
   CardContent,
 } from "@/components/ui/card";
-import { ArrowLeft, BriefcaseBusiness, Eye, Globe, Mail, MapPin, Newspaper, Phone, SquareCheckBig } from "lucide-react";
+import { BriefcaseBusiness, Eye, Globe, Mail, MapPin, Newspaper, Phone, SquareCheckBig } from "lucide-react";
 import PostCard from "./components/PostCard";
 import AllPostsCard from "./components/AllPostsCard";
 import TodosCard from "./components/TodosCard";
@@ -11,7 +11,7 @@ import { getUserDetail } from "@/action/getUserDetail";
 import { Post } from "@/types/post";
 import BackButton from "@/components/ui/back-button";
 
-export async function generateMetadata({ params }: { params: { id: string } }) {
+export async function generateMetadata({ params }: { params: Promise<{ id: string }> }) {
   const { id } = await params;
 
   const dataUser = await getUserDetail(id);
@@ -22,7 +22,7 @@ export async function generateMetadata({ params }: { params: { id: string } }) {
   };
 }
 
-const UserDetailsPage = async ({ params }: { params: { id: string } }) => {
+const UserDetailsPage = async ({ params }: { params: Promise<{ id: string }> }) => {
   const { id } = await params;
 
   const dataUser = await getUserDetail(id);
