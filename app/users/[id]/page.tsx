@@ -11,6 +11,17 @@ import { getUserDetail } from "@/action/getUserDetail";
 import { Post } from "@/types/post";
 import BackButton from "@/components/ui/back-button";
 
+export async function generateMetadata({ params }: { params: { id: string } }) {
+  const { id } = await params;
+
+  const dataUser = await getUserDetail(id);
+
+  return {
+    title: `${dataUser.name} (@${dataUser.username})`,
+    description: `View profile details for ${dataUser.name} from ${dataUser.company.name}. Contact via ${dataUser.email}.`,
+  };
+}
+
 const UserDetailsPage = async ({ params }: { params: { id: string } }) => {
   const { id } = await params;
 
