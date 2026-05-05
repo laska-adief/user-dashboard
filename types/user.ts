@@ -27,3 +27,9 @@ export interface User {
   website: string;
   company: Company;
 }
+
+export interface UserData extends User {
+  postCounts: number;
+  completedTodoCounts: number;
+  pendingTodoCounts: number;
+}
