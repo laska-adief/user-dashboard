@@ -52,6 +52,37 @@ const UserTable = () => {
   } | null>(null);
   const [currentPage, setCurrentPage] = useState(1);
   const [pageSize, setPageSize] = useState(10);
+  const [isInitialized, setIsInitialized] = useState(false);
+
+  // Load filters from sessionStorage on mount
+  useEffect(() => {
+    const savedFilters = sessionStorage.getItem("user-table-filters");
+    if (savedFilters) {
+      try {
+        const {
+          searchQuery: savedSearch,
+          sortConfig: savedSort,
+          currentPage: savedPage,
+          pageSize: savedSize,
+        } = JSON.parse(savedFilters);
+        if (savedSearch !== undefined) setSearchQuery(savedSearch);
+        if (savedSort !== undefined) setSortConfig(savedSort);
+        if (savedPage !== undefined) setCurrentPage(savedPage);
+        if (savedSize !== undefined) setPageSize(savedSize);
+      } catch (error) {
+        console.error("Failed to parse saved filters:", error);
+      }
+    }
+    setIsInitialized(true);
+  }, []);
+
+  // Save filters to sessionStorage whenever they change
+  useEffect(() => {
+    if (isInitialized) {
+      const filters = { searchQuery, sortConfig, currentPage, pageSize };
+      sessionStorage.setItem("user-table-filters", JSON.stringify(filters));
+    }
+  }, [searchQuery, sortConfig, currentPage, pageSize, isInitialized]);
 
   const { paginatedData, totalPages } = useMemo(() => {
     if (!users) return { paginatedData: [], totalPages: 0 };
@@ -142,7 +173,10 @@ const UserTable = () => {
           <Input
             placeholder="Search users by name, username, or email"
             value={searchQuery}
-            onChange={(e) => setSearchQuery(e.target.value)}
+            onChange={(e) => {
+              setSearchQuery(e.target.value);
+              setCurrentPage(1);
+            }}
           />
         </div>
       </div>
@@ -272,7 +306,10 @@ const UserTable = () => {
                   <span>Size : </span>
                   <Select
                     value={pageSize.toString()}
-                    onValueChange={(value) => setPageSize(Number(value))}
+                    onValueChange={(value) => {
+                      setPageSize(Number(value));
+                      setCurrentPage(1);
+                    }}
                   >
                     <SelectTrigger className="w-[80px]">
                       <SelectValue placeholder="Page Size" />

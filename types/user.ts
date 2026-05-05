@@ -1,3 +1,6 @@
+import { Post } from "./post";
+import { Todo } from "./todo";
+
 export interface Geo {
   lat: string;
   lng: string;
@@ -32,4 +35,9 @@ export interface UserData extends User {
   postCounts: number;
   completedTodoCounts: number;
   pendingTodoCounts: number;
+}
+
+export interface UserDetail extends User {
+  posts: Post[];
+  todos: Todo[];
 }
