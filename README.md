@@ -1,36 +1,80 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# User Dashboard
+
+A modern Next.js application for managing users and their data, featuring detailed views, sorting, searching, and persistent filtering.
+
+## Prerequisites
+
+- Node.js 18.0 or later
+- npm (Node Package Manager)
 
 ## Getting Started
 
-First, run the development server:
+Follow these steps to get the project up and running on your local machine.
+
+### 1. Install Dependencies
+
+First, navigate to the project directory and install the necessary packages:
+
+```bash
+npm install
+```
+
+### 2. Configure Environment Variables
+
+Create a `.env` file in the root directory and ensure it contains the API URL:
+
+```env
+API_URL=https://jsonplaceholder.typicode.com
+```
+
+### 3. Run the Development Server
+
+Start the development server on [http://localhost:3000](http://localhost:3000):
 
 ```bash
 npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+The app will automatically reload if you change any of the source files.
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+## Running Tests
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+The project includes both component unit tests and end-to-end (E2E) tests.
 
-## Learn More
+### Component and Unit Testing
 
-To learn more about Next.js, take a look at the following resources:
+To run the unit tests using Jest:
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+```bash
+npm run test
+```
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+For development, you can run tests in watch mode:
 
-## Deploy on Vercel
+```bash
+npm run test:watch
+```
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+### End-to-End (E2E) Testing
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+End-to-end tests are handled by Playwright. These tests verify the complete user flow from the list view to the detail view.
+
+**Note:** The development server must be running on port 3000 before executing E2E tests.
+
+```bash
+# In one terminal
+npm run dev
+
+# In another terminal
+npm run test:e2e
+```
+
+## Tech Stack
+
+- **Framework:** Next.js 16 (App Router)
+- **Language:** TypeScript
+- **State Management:** React Query (TanStack Query)
+- **Styling:** Tailwind CSS
+- **UI Components:** shadcn/ui
+- **Icons:** Lucide React
+- **Testing:** Playwright & Jest
